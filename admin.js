@@ -1,33 +1,139 @@
 const saveBtn = document.getElementById("saveBtn");
 
-saveBtn.addEventListener("click", () => {
+const eventList = document.getElementById("eventList");
 
-  const date = document.getElementById("eventDate").value;
-  const title = document.getElementById("eventTitle").value;
-  const type = document.getElementById("eventType").value;
-  const priority = document.getElementById("eventPriority").value;
-  const notes = document.getElementById("eventNotes").value;
+function getEvents(){
 
-  if (!date || !title) {
-    alert("Missing fields.");
-    return;
-  }
+return JSON.parse(
+localStorage.getItem("events")
+) || {};
 
-  let events = JSON.parse(localStorage.getItem("events")) || {};
+}
 
-  if (!events[date]) {
-    events[date] = [];
-  }
+function saveEvents(events){
 
-  events[date].push({
-    title,
-    type,
-    priority,
-    notes
-  });
+localStorage.setItem(
+"events",
+JSON.stringify(events)
+);
 
-  localStorage.setItem("events", JSON.stringify(events));
+}
 
-  alert("Event Saved.");
+function renderEvents(){
+
+const events = getEvents();
+
+eventList.innerHTML = "";
+
+for(const date in events){
+
+events[date].forEach((event,index)=>{
+
+const card = document.createElement("div");
+
+card.style.marginBottom = "20px";
+card.style.padding = "15px";
+card.style.border = "1px solid orange";
+card.style.borderRadius = "10px";
+card.style.background = "#1b0d00";
+
+card.innerHTML = `
+
+<h3>${event.title}</h3>
+
+<p><strong>Date:</strong> ${date}</p>
+
+<p><strong>Type:</strong> ${event.type}</p>
+
+<p><strong>Priority:</strong> ${event.priority}</p>
+
+<p>${event.notes}</p>
+
+<button onclick="deleteEvent('${date}',${index})">
+DELETE
+</button>
+
+`;
+
+eventList.appendChild(card);
 
 });
+
+}
+
+}
+
+function deleteEvent(date,index){
+
+const events = getEvents();
+
+events[date].splice(index,1);
+
+if(events[date].length===0){
+
+delete events[date];
+
+}
+
+saveEvents(events);
+
+renderEvents();
+
+}
+
+saveBtn.addEventListener("click",function(){
+
+const rawDate =
+document.getElementById("eventDate").value;
+
+const title =
+document.getElementById("eventTitle").value;
+
+const type =
+document.getElementById("eventType").value;
+
+const priority =
+document.getElementById("eventPriority").value;
+
+const notes =
+document.getElementById("eventNotes").value;
+
+if(!rawDate || !title){
+
+alert("Missing fields.");
+
+return;
+
+}
+
+const splitDate = rawDate.split("-");
+
+const formattedDate =
+`${splitDate[0]}-${parseInt(splitDate[1])}-${parseInt(splitDate[2])}`;
+
+const events = getEvents();
+
+if(!events[formattedDate]){
+
+events[formattedDate] = [];
+
+}
+
+events[formattedDate].push({
+
+title,
+type,
+priority,
+notes
+
+});
+
+saveEvents(events);
+
+renderEvents();
+
+alert("Event Saved.");
+
+});
+
+renderEvents();
