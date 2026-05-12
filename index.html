@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Event Calendar</title>
+  <title>Operations Grid</title>
   <link rel="stylesheet" href="style.css">
 </head>
 
@@ -11,9 +12,45 @@
 
 <div class="container">
 
-  <h1>EVENT CALENDAR</h1>
+  <div class="topbar">
 
-  <div id="calendar"></div>
+    <div>
+      <h1>EVENT CALENDAR</h1>
+      <p>TACTICAL OPERATIONS GRID</p>
+    </div>
+
+    <div class="nav-buttons">
+      <button id="prevMonth">‹</button>
+      <button id="nextMonth">›</button>
+    </div>
+
+  </div>
+
+  <div id="monthTitle" class="month-title"></div>
+
+  <div class="weekdays">
+    <div>MON</div>
+    <div>TUE</div>
+    <div>WED</div>
+    <div>THU</div>
+    <div>FRI</div>
+    <div>SAT</div>
+    <div>SUN</div>
+  </div>
+
+  <div id="calendar" class="calendar-grid"></div>
+
+</div>
+
+<div id="modal" class="modal hidden">
+
+  <div class="modal-content">
+
+    <span id="closeModal" class="close-btn">×</span>
+
+    <div id="modalBody"></div>
+
+  </div>
 
 </div>
 
