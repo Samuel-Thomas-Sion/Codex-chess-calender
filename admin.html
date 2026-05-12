@@ -1,48 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Operations Admin</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Operations Admin</title>
+
+<link rel="stylesheet" href="style.css">
+
 </head>
+
 <body>
 
-<div class="calendar-container">
+<div class="container">
 
 <h1>ADMIN EVENT CONTROL</h1>
 
+<p>Create and manage tactical events.</p>
+
+<br>
+
 <input type="date" id="eventDate">
+
 <br><br>
 
-<input type="text" id="eventTitle" placeholder="Event Title">
+<input
+type="text"
+id="eventTitle"
+placeholder="Event Title"
+>
+
 <br><br>
 
 <select id="eventType">
-  <option>Blitz 3|0</option>
-  <option>Blitz 5|0</option>
-  <option>Rapid</option>
-  <option>Bullet</option>
-  <option>Daily</option>
-  <option>Community</option>
+
+<option>Blitz 3|0</option>
+<option>Blitz 5|0</option>
+<option>Rapid</option>
+<option>Bullet</option>
+<option>Daily</option>
+<option>Community</option>
+
 </select>
+
 <br><br>
 
 <select id="eventPriority">
-  <option value="low">Low</option>
-  <option value="normal">Normal</option>
-  <option value="high">High</option>
-  <option value="critical">Critical</option>
+
+<option value="low">Low</option>
+<option value="normal">Normal</option>
+<option value="high">High</option>
+<option value="critical">Critical</option>
+
 </select>
+
 <br><br>
 
-<textarea id="eventNotes" placeholder="Event Notes"></textarea>
+<textarea
+id="eventNotes"
+placeholder="Event Notes"
+rows="6"
+style="
+width:300px;
+background:#1b0d00;
+color:white;
+border:1px solid orange;
+padding:10px;
+border-radius:10px;
+"
+></textarea>
+
 <br><br>
 
-<button id="saveBtn">SAVE EVENT</button>
+<button id="saveBtn">
+SAVE EVENT
+</button>
+
+<hr>
+
+<h2>EXISTING EVENTS</h2>
+
+<div id="eventList"></div>
 
 </div>
 
 <script src="admin.js"></script>
+
 </body>
 </html>
