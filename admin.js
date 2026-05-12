@@ -1,96 +1,90 @@
 console.log(firebase);
-console.log(auth);
 
+const auth = firebase.auth();
+const db = firebase.firestore();
 const provider = new firebase.auth.GoogleAuthProvider();
 
 let currentUser = null;
 
-auth.onAuthStateChanged(async function(user){
+// 🔐 AUTH CONTROL
+auth.onAuthStateChanged(async (user) => {
+  if (user) {
 
-if(user){
+    if (user.email !== "samuel.thomas@gmail.com") {
+      document.body.innerHTML = "<h1>ACCESS DENIED</h1>";
+      await auth.signOut();
+      return;
+    }
 
-if(user.email !== "samuel.thomas@gmail.com"){
+    currentUser = user;
+    console.log("Logged in:", user.email);
 
-document.body.innerHTML =
-"<h1>ACCESS DENIED</h1>";
+    renderEvents();
 
-auth.signOut();
-
-return;
-
-}
-
-currentUser = user;
-
-renderEvents();
-
-}
-else{
-
-try{
-
-await auth.signInWithPopup(provider);
-
-}
-catch(error){
-
-console.log(error);
-
-}
-
-}
-
+  } else {
+    console.log("Not logged in");
+  }
 });
 
-}
+// 🔑 LOGIN BUTTON (MUST BE MANUAL, NOT AUTO)
+document.getElementById("loginBtn").addEventListener("click", async () => {
+  try {
+    await auth.signInWithPopup(provider);
+  } catch (err) {
+    console.error("Login error:", err);
+  }
+});
 
-window.deleteEvent = async function(id){
+// 💾 SAVE EVENT
+document.getElementById("saveBtn").addEventListener("click", async () => {
+  if (!currentUser) {
+    alert("Not authenticated");
+    return;
+  }
 
-await db.collection("events")
-.doc(id)
-.delete();
+  const date = document.getElementById("eventDate").value;
+  const title = document.getElementById("eventTitle").value;
+  const type = document.getElementById("eventType").value;
+  const priority = document.getElementById("eventPriority").value;
+  const notes = document.getElementById("eventNotes").value;
 
-renderEvents();
+  await db.collection("events").add({
+    date,
+    title,
+    type,
+    priority,
+    notes,
+    createdBy: currentUser.email,
+    createdAt: new Date()
+  });
 
+  alert("Event Saved");
+  renderEvents();
+});
+
+// 🗑 DELETE EVENT
+window.deleteEvent = async function(id) {
+  await db.collection("events").doc(id).delete();
+  renderEvents();
 };
-if(!currentUser){
 
-alert("Not authenticated.");
+// 📋 RENDER EVENTS (MINIMAL VERSION)
+async function renderEvents() {
+  const container = document.getElementById("eventList");
+  container.innerHTML = "";
 
-return;
+  const snapshot = await db.collection("events").get();
 
+  snapshot.forEach(doc => {
+    const data = doc.data();
+
+    const div = document.createElement("div");
+    div.innerHTML = `
+      <p><b>${data.title}</b> (${data.date})</p>
+      <button onclick="deleteEvent('${doc.id}')">Delete</button>
+      <hr>
+    `;
+
+    container.appendChild(div);
+  });
 }
-saveBtn.addEventListener("click", async function(){
-
-const date =
-document.getElementById("eventDate").value;
-
-const title =
-document.getElementById("eventTitle").value;
-
-const type =
-document.getElementById("eventType").value;
-
-const priority =
-document.getElementById("eventPriority").value;
-
-const notes =
-document.getElementById("eventNotes").value;
-
-await db.collection("events").add({
-
-date,
-title,
-type,
-priority,
-notes
-
-});
-
-alert("Event Saved");
-
-renderEvents();
-
-});
-
-renderEvents();
