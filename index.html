@@ -54,7 +54,26 @@
 
 </div>
 
-<script src="script.js"></script>
+<script>
 
+const firebaseConfig = {
+
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+  apiKey: "AIzaSyBn_mhOSCqiseN5X65y7TaEgQeCNUCsyF8",
+  authDomain: "codex-calender-27650.firebaseapp.com",
+  projectId: "codex-calender-27650",
+  storageBucket: "codex-calender-27650.firebasestorage.app",
+  messagingSenderId: "584615922168",
+  appId: "1:584615922168:web:84cdba0ab0dfd250062e0d",
+  measurementId: "G-NE2MXJJBWY"
+};
+firebase.initializeApp(firebaseConfig);
+
+const db = firebase.firestore();
+
+</script>
+
+<script src="script.js"></script>
+  
 </body>
 </html>
