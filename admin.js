@@ -1,3 +1,6 @@
+console.log(firebase);
+console.log(auth);
+
 const provider = new firebase.auth.GoogleAuthProvider();
 
 let currentUser = null;
