@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Operations Admin</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="calendar-container">
+
+<h1>ADMIN EVENT CONTROL</h1>
+
+<input type="date" id="eventDate">
+<br><br>
+
+<input type="text" id="eventTitle" placeholder="Event Title">
+<br><br>
+
+<select id="eventType">
+  <option>Blitz 3|0</option>
+  <option>Blitz 5|0</option>
+  <option>Rapid</option>
+  <option>Bullet</option>
+  <option>Daily</option>
+  <option>Community</option>
+</select>
+<br><br>
+
+<select id="eventPriority">
+  <option value="low">Low</option>
+  <option value="normal">Normal</option>
+  <option value="high">High</option>
+  <option value="critical">Critical</option>
+</select>
+<br><br>
+
+<textarea id="eventNotes" placeholder="Event Notes"></textarea>
+<br><br>
+
+<button id="saveBtn">SAVE EVENT</button>
+
+</div>
+
+<script src="admin.js"></script>
+</body>
+</html>
