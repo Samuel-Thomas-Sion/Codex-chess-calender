@@ -1,26 +1,163 @@
 body{
+    margin:0;
     background:#120700;
     color:white;
     font-family:Arial;
-    margin:0;
+}
+
+.container{
+    width:95%;
+    margin:auto;
     padding:20px;
 }
 
-h1{
-    color:orange;
+.topbar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
 }
 
-#calendar{
+h1{
+    color:#ff7b00;
+    margin:0;
+}
+
+p{
+    color:#ffb76b;
+    margin:0;
+    font-size:12px;
+}
+
+.nav-buttons button{
+    width:42px;
+    height:42px;
+    border:none;
+    border-radius:10px;
+    background:#2a1200;
+    color:#ffb76b;
+    font-size:22px;
+    cursor:pointer;
+    border:1px solid #ff7b00;
+}
+
+.month-title{
+    text-align:center;
+    font-size:28px;
+    color:#ff9d42;
+    margin:20px 0;
+    font-weight:bold;
+}
+
+.weekdays,
+.calendar-grid{
     display:grid;
     grid-template-columns:repeat(7,1fr);
-    gap:10px;
-    margin-top:20px;
+    gap:8px;
+}
+
+.weekdays div{
+    text-align:center;
+    color:#ffb76b;
+    font-weight:bold;
+    padding:10px;
 }
 
 .day{
-    background:#1d0d00;
-    border:1px solid orange;
-    min-height:80px;
-    border-radius:10px;
-    padding:10px;
+    min-height:90px;
+    background:#1b0d00;
+    border:1px solid #4a2400;
+    border-radius:12px;
+    padding:8px;
+    position:relative;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+.day:hover{
+    border-color:#ff7b00;
+    box-shadow:0 0 12px #ff7b00;
+}
+
+.day-number{
+    font-weight:bold;
+    color:#ffd6a3;
+}
+
+.event-dot{
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    position:absolute;
+    bottom:10px;
+    right:10px;
+}
+
+.low{
+    background:gray;
+}
+
+.normal{
+    background:#0091ff;
+}
+
+.high{
+    background:orange;
+}
+
+.critical{
+    background:red;
+    box-shadow:0 0 12px red;
+}
+
+.modal{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.8);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.hidden{
+    display:none;
+}
+
+.modal-content{
+    width:350px;
+    background:#1b0d00;
+    border:2px solid #ff7b00;
+    border-radius:18px;
+    padding:25px;
+    position:relative;
+    box-shadow:0 0 20px #ff7b00;
+}
+
+.close-btn{
+    position:absolute;
+    top:10px;
+    right:15px;
+    font-size:28px;
+    cursor:pointer;
+}
+
+.event-card{
+    margin-top:15px;
+    padding-bottom:10px;
+    border-bottom:1px solid #4a2400;
+}
+
+.event-title{
+    color:#ff9d42;
+    font-size:20px;
+    font-weight:bold;
+}
+
+.event-info{
+    margin-top:6px;
+    color:#ffd8a8;
+}
+
+.event-notes{
+    margin-top:10px;
+    color:#ffddb8;
 }
