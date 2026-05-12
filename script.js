@@ -7,36 +7,13 @@ const closeModal = document.getElementById("closeModal");
 
 let currentDate = new Date();
 
-const events = {
+function getEvents(){
 
-"2026-5-12":[
-{
-title:"Codex Clash",
-type:"Blitz 5|0",
-priority:"high",
-notes:"Main tournament operation."
+return JSON.parse(
+localStorage.getItem("events")
+) || {};
+
 }
-],
-
-"2026-5-18":[
-{
-title:"Daily Championship",
-type:"Daily",
-priority:"normal",
-notes:"Long format tactical match."
-}
-],
-
-"2026-5-25":[
-{
-title:"Critical Match",
-type:"Bullet",
-priority:"critical",
-notes:"Elite operation event."
-}
-]
-
-};
 
 function renderCalendar(){
 
@@ -81,6 +58,7 @@ const dateKey = `${year}-${month+1}-${day}`;
 dayBox.innerHTML =
 `<div class="day-number">${day}</div>`;
 
+const events = getEvents(); 
 if(events[dateKey]){
 
 const dot = document.createElement("div");
@@ -95,6 +73,7 @@ dayBox.appendChild(dot);
 
 dayBox.addEventListener("click", function(){
 
+const events = getEvents(); 
 openModal(dateKey);
 
 });
