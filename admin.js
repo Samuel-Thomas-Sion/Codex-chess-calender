@@ -72,41 +72,39 @@ loginBtn.addEventListener("click", async () => {
 // =====================
 // SAVE EVENT
 // =====================
-saveBtn.addEventListener("click", async () => {
-  if (!currentUser) {
-    alert("Not authenticated");
-    return;
-  }
-
-  const date = document.getElementById("eventDate").value;
-  const title = document.getElementById("eventTitle").value;
-  const type = document.getElementById("eventType").value;
-  const priority = document.getElementById("eventPriority").value;
-  const notes = document.getElementById("eventNotes").value;
-
-  if (!date || !title) {
-    alert("Date and Title required");
-    return;
-  }
-
+document.getElementById("saveBtn").addEventListener("click", async () => {
   try {
-    await db.collection("events").add({
-      date,
-      title,
-      type,
-      priority,
-      notes,
-      createdBy: currentUser.email,
+    console.log("SAVE CLICKED");
+
+    const user = firebase.auth().currentUser;
+
+    if (!user) {
+      alert("Not logged in");
+      console.log("No auth user");
+      return;
+    }
+
+    const data = {
+      date: document.getElementById("eventDate").value,
+      title: document.getElementById("eventTitle").value,
+      type: document.getElementById("eventType").value,
+      priority: document.getElementById("eventPriority").value,
+      notes: document.getElementById("eventNotes").value,
+      createdBy: user.email,
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
+    };
 
-    alert("Event Saved");
+    console.log("Writing to Firestore:", data);
 
-    renderEvents();
+    await firebase.firestore().collection("events").add(data);
+
+    alert("Saved successfully!");
+
+    console.log("SAVE SUCCESS");
 
   } catch (err) {
-    console.error("Save failed:", err);
-    alert("Failed to save event");
+    console.error("SAVE FAILED:", err);
+    alert("Save failed — check console");
   }
 });
 
