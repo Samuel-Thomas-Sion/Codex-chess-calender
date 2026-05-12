@@ -31,7 +31,13 @@ document.getElementById("loginBtn").addEventListener("click", async () => {
   try {
     await auth.signInWithPopup(provider);
   } catch (err) {
-    console.error("Login error:", err);
+    console.warn("Popup failed, using redirect:", err);
+    auth.signInWithRedirect(provider);
+  }
+});
+auth.getRedirectResult().then((result) => {
+  if (result.user) {
+    console.log("Redirect login success:", result.user.email);
   }
 });
 
