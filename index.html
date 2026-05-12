@@ -1,1 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Operations Grid</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
+<div class="calendar-container">
+
+  <div class="topbar">
+    <div>
+      <h1>EVENT CALENDAR</h1>
+      <p>AUTO-UPDATED MONTHLY</p>
+    </div>
+
+    <div class="nav-buttons">
+      <button id="prevMonth">‹</button>
+      <button id="nextMonth">›</button>
+    </div>
+  </div>
+
+  <div class="month-title" id="monthTitle"></div>
+
+  <div class="days-row">
+    <div>MON</div>
+    <div>TUE</div>
+    <div>WED</div>
+    <div>THU</div>
+    <div>FRI</div>
+    <div>SAT</div>
+    <div>SUN</div>
+  </div>
+
+  <div id="calendarGrid" class="calendar-grid"></div>
+
+</div>
+
+<div id="eventModal" class="modal hidden">
+  <div class="modal-content">
+    <span id="closeModal" class="close">×</span>
+
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
