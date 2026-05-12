@@ -66,45 +66,47 @@ loginBtn.addEventListener("click", async () => {
     console.error("Popup login failed:", err);
 
     alert("Login failed. Check console.");
+
+
+
+
   }
 });
 
 // =====================
 // SAVE EVENT
 // =====================
-document.getElementById("saveBtn").addEventListener("click", async () => {
+saveBtn.addEventListener("click", async () => {
+  if (!currentUser) {
+    alert("Not authenticated");
+    return;
+@@ -54,43 +84,80 @@ document.getElementById("saveBtn").addEventListener("click", async () => {
+  const priority = document.getElementById("eventPriority").value;
+  const notes = document.getElementById("eventNotes").value;
+
+  if (!date || !title) {
+    alert("Date and Title required");
+    return;
+  }
+
   try {
-    console.log("SAVE CLICKED");
-
-    const user = firebase.auth().currentUser;
-
-    if (!user) {
-      alert("Not logged in");
-      console.log("No auth user");
-      return;
-    }
-
-    const data = {
-      date: document.getElementById("eventDate").value,
-      title: document.getElementById("eventTitle").value,
-      type: document.getElementById("eventType").value,
-      priority: document.getElementById("eventPriority").value,
-      notes: document.getElementById("eventNotes").value,
-      createdBy: user.email,
+    await db.collection("events").add({
+      date,
+      title,
+      type,
+      priority,
+      notes,
+      createdBy: currentUser.email,
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    };
+    });
 
-    console.log("Writing to Firestore:", data);
+    alert("Event Saved");
 
-    await firebase.firestore().collection("events").add(data);
-
-    alert("Saved successfully!");
-
-    console.log("SAVE SUCCESS");
+    renderEvents();
 
   } catch (err) {
-    console.error("SAVE FAILED:", err);
-    alert("Save failed — check console");
+    console.error("Save failed:", err);
+    alert("Failed to save event");
   }
 });
 
@@ -142,6 +144,8 @@ async function renderEvents() {
       div.style.border = "1px solid orange";
       div.style.margin = "10px";
       div.style.padding = "10px";
+
+
 
       div.innerHTML = `
         <h3>${data.title}</h3>
