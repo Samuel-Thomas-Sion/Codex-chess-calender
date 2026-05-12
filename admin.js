@@ -1,9 +1,10 @@
 const provider = new firebase.auth.GoogleAuthProvider();
 
-auth.signInWithPopup(provider)
-.then((result)=>{
+let currentUser = null;
 
-const user = result.user;
+auth.onAuthStateChanged(async function(user){
+
+if(user){
 
 if(user.email !== "samuel.thomas@gmail.com"){
 
@@ -16,56 +17,25 @@ return;
 
 }
 
-})
-.catch((error)=>{
+currentUser = user;
+
+renderEvents();
+
+}
+else{
+
+try{
+
+await auth.signInWithPopup(provider);
+
+}
+catch(error){
 
 console.log(error);
 
-});const saveBtn =
-document.getElementById("saveBtn");
+}
 
-const eventList =
-document.getElementById("eventList");
-
-async function renderEvents(){
-
-eventList.innerHTML = "";
-
-const snapshot =
-await db.collection("events").get();
-
-snapshot.forEach((document)=>{
-
-const event = document.data();
-
-const card =
-document.createElement("div");
-
-card.style.marginBottom = "20px";
-card.style.padding = "15px";
-card.style.border = "1px solid orange";
-card.style.borderRadius = "10px";
-card.style.background = "#1b0d00";
-
-card.innerHTML = `
-
-<h3>${event.title}</h3>
-
-<p>Date: ${event.date}</p>
-
-<p>Type: ${event.type}</p>
-
-<p>Priority: ${event.priority}</p>
-
-<p>${event.notes}</p>
-
-<button onclick="deleteEvent('${document.id}')">
-DELETE
-</button>
-
-`;
-
-eventList.appendChild(card);
+}
 
 });
 
@@ -80,7 +50,13 @@ await db.collection("events")
 renderEvents();
 
 };
+if(!currentUser){
 
+alert("Not authenticated.");
+
+return;
+
+}
 saveBtn.addEventListener("click", async function(){
 
 const date =
