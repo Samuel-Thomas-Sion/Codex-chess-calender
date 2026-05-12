@@ -4,11 +4,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Operations Admin</title>
-
 <link rel="stylesheet" href="style.css">
-
 </head>
 
 <body>
@@ -16,87 +13,51 @@
 <div class="container">
 
 <h1>ADMIN EVENT CONTROL</h1>
-
 <p>Create and manage tactical events.</p>
 
-<br>
+<input type="date" id="eventDate"><br><br>
 
-<input type="date" id="eventDate">
-
-<br><br>
-
-<input
-type="text"
-id="eventTitle"
-placeholder="Event Title"
->
-
-<br><br>
+<input type="text" id="eventTitle" placeholder="Event Title"><br><br>
 
 <select id="eventType">
-
 <option>Blitz 3|0</option>
 <option>Blitz 5|0</option>
 <option>Rapid</option>
 <option>Bullet</option>
 <option>Daily</option>
 <option>Community</option>
-
 </select>
 
 <br><br>
 
 <select id="eventPriority">
-
 <option value="low">Low</option>
 <option value="normal">Normal</option>
 <option value="high">High</option>
 <option value="critical">Critical</option>
-
 </select>
 
 <br><br>
 
-<textarea
-id="eventNotes"
-placeholder="Event Notes"
-rows="6"
-style="
-width:300px;
-background:#1b0d00;
-color:white;
-border:1px solid orange;
-padding:10px;
-border-radius:10px;
-"
-></textarea>
+<textarea id="eventNotes" placeholder="Event Notes" rows="6"></textarea>
 
 <br><br>
 
- <button id="loginBtn">
-LOGIN WITH GOOGLE
-</button> 
-<button id="saveBtn">
-SAVE EVENT
-</button>
+<button type="button" id="loginBtn">LOGIN WITH GOOGLE</button>
+<button type="button" id="saveBtn" disabled>SAVE EVENT</button>
 
 <hr>
 
 <h2>EXISTING EVENTS</h2>
-
 <div id="eventList"></div>
 
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 
 <script>
-
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyBn_mhOSCqiseN5X65y7TaEgQeCNUCsyF8",
   authDomain: "codex-calender-27650.firebaseapp.com",
@@ -106,12 +67,40 @@ const firebaseConfig = {
   appId: "1:584615922168:web:84cdba0ab0dfd250062e0d",
   measurementId: "G-NE2MXJJBWY"
 };
-  
+
 firebase.initializeApp(firebaseConfig);
 
 const db = firebase.firestore();
-  const auth = firebase.auth();
+const auth = firebase.auth();
+const provider = new firebase.auth.GoogleAuthProvider();
 
+let currentUser = null;
+
+// AUTH STATE TRACKER (CRITICAL FIX)
+auth.onAuthStateChanged(user => {
+  currentUser = user;
+
+  const saveBtn = document.getElementById("saveBtn");
+
+  if (user) {
+    saveBtn.disabled = false;
+    console.log("Logged in:", user.email);
+  } else {
+    saveBtn.disabled = true;
+    console.log("Not logged in");
+  }
+});
+
+// LOGIN BUTTON
+document.getElementById("loginBtn").addEventListener("click", () => {
+  auth.signInWithPopup(provider)
+    .then(result => {
+      console.log("Login success:", result.user.email);
+    })
+    .catch(err => {
+      console.error("Login failed:", err);
+    });
+});
 
 </script>
 
