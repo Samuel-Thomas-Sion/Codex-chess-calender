@@ -3,15 +3,28 @@ const monthTitle = document.getElementById("monthTitle");
 
 const modal = document.getElementById("modal");
 const modalBody = document.getElementById("modalBody");
-const closeModal = document.getElementById("closeModal");
+
+const closeModal =
+document.getElementById("closeModal");
 
 let currentDate = new Date();
 
-function getEvents(){
+let events = [];
 
-return JSON.parse(
-localStorage.getItem("events")
-) || {};
+async function loadEvents(){
+
+events = [];
+
+const snapshot =
+await db.collection("events").get();
+
+snapshot.forEach((doc)=>{
+
+events.push(doc.data());
+
+});
+
+renderCalendar();
 
 }
 
@@ -22,59 +35,64 @@ calendar.innerHTML = "";
 const year = currentDate.getFullYear();
 const month = currentDate.getMonth();
 
-monthTitle.textContent = currentDate.toLocaleString(
-"default",
-{
+monthTitle.textContent =
+currentDate.toLocaleString("default",{
 month:"long",
 year:"numeric"
-}
-);
+});
 
-const firstDay = new Date(year, month, 1);
-const lastDay = new Date(year, month + 1, 0);
+const firstDay = new Date(year,month,1);
+
+const lastDay =
+new Date(year,month+1,0);
 
 let startDay = firstDay.getDay();
 
-if(startDay === 0){
-startDay = 7;
+if(startDay===0){
+startDay=7;
 }
 
-for(let i = 1; i < startDay; i++){
+for(let i=1;i<startDay;i++){
 
-const empty = document.createElement("div");
+const empty =
+document.createElement("div");
 
 calendar.appendChild(empty);
 
 }
 
-for(let day = 1; day <= lastDay.getDate(); day++){
+for(let day=1;day<=lastDay.getDate();day++){
 
-const dayBox = document.createElement("div");
+const dayBox =
+document.createElement("div");
 
 dayBox.className = "day";
 
-const dateKey = `${year}-${month+1}-${day}`;
+const dateString =
+`${year}-${String(month+1).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
 
 dayBox.innerHTML =
 `<div class="day-number">${day}</div>`;
 
-const events = getEvents(); 
-if(events[dateKey]){
+const dayEvents =
+events.filter(event=>event.date===dateString);
 
-const dot = document.createElement("div");
+if(dayEvents.length>0){
+
+const dot =
+document.createElement("div");
 
 dot.classList.add("event-dot");
 
-dot.classList.add(events[dateKey][0].priority);
+dot.classList.add(dayEvents[0].priority);
 
 dayBox.appendChild(dot);
 
 }
 
-dayBox.addEventListener("click", function(){
+dayBox.addEventListener("click",()=>{
 
-const events = getEvents(); 
-openModal(dateKey);
+openModal(dateString);
 
 });
 
@@ -84,15 +102,19 @@ calendar.appendChild(dayBox);
 
 }
 
-function openModal(dateKey){
+function openModal(dateString){
 
-if(!events[dateKey]){
+const dayEvents =
+events.filter(event=>event.date===dateString);
+
+if(dayEvents.length===0){
 return;
 }
 
-modalBody.innerHTML = `<h2>${dateKey}</h2>`;
+modalBody.innerHTML =
+`<h2>${dateString}</h2>`;
 
-events[dateKey].forEach(function(event){
+dayEvents.forEach(event=>{
 
 modalBody.innerHTML += `
 
@@ -107,7 +129,7 @@ Type: ${event.type}
 </div>
 
 <div class="event-info">
-Priority: ${event.priority.toUpperCase()}
+Priority: ${event.priority}
 </div>
 
 <div class="event-notes">
@@ -124,38 +146,32 @@ modal.classList.remove("hidden");
 
 }
 
-closeModal.addEventListener("click", function(){
+closeModal.onclick=()=>{
 
 modal.classList.add("hidden");
 
-});
-
-window.addEventListener("click", function(e){
-
-if(e.target === modal){
-
-modal.classList.add("hidden");
-
-}
-
-});
+};
 
 document.getElementById("prevMonth")
-.addEventListener("click", function(){
+.onclick=()=>{
 
-currentDate.setMonth(currentDate.getMonth() - 1);
+currentDate.setMonth(
+currentDate.getMonth()-1
+);
 
 renderCalendar();
 
-});
+};
 
 document.getElementById("nextMonth")
-.addEventListener("click", function(){
+.onclick=()=>{
 
-currentDate.setMonth(currentDate.getMonth() + 1);
-
-renderCalendar();
-
-});
+currentDate.setMonth(
+currentDate.getMonth()+1
+);
 
 renderCalendar();
+
+};
+
+loadEvents();
