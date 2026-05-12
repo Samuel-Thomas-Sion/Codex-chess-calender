@@ -1,4 +1,27 @@
-const saveBtn =
+const provider = new firebase.auth.GoogleAuthProvider();
+
+auth.signInWithPopup(provider)
+.then((result)=>{
+
+const user = result.user;
+
+if(user.email !== "samuel.thomas@gmail.com"){
+
+document.body.innerHTML =
+"<h1>ACCESS DENIED</h1>";
+
+auth.signOut();
+
+return;
+
+}
+
+})
+.catch((error)=>{
+
+console.log(error);
+
+});const saveBtn =
 document.getElementById("saveBtn");
 
 const eventList =
